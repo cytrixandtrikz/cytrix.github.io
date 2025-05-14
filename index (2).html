@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TRICKz</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: monospace;
+      background: black;
+      color: white;
+      display: flex;
+    }
+
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(ellipse at bottom, #000 0%, #111 100%);
+      z-index: 1000;
+      animation: fadeOut 1s ease 3s forwards;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    .rocket {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 80px;
+      background: white;
+      border-radius: 20px 20px 5px 5px;
+      z-index: 10;
+      animation: rocket-launch 3s ease forwards;
+    }
+
+    .rocket .window {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 15px;
+      height: 15px;
+      background: #3cf;
+      border-radius: 50%;
+      border: 2px solid #0cf;
+    }
+
+    .rocket .flame {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 80px;
+      background: orange;
+      border-radius: 50%;
+      animation: flame-flicker 0.3s infinite;
+    }
+
+    @keyframes flame-flicker {
+      0%, 100% { background: orange; height: 80px; }
+      50% { background: red; height: 60px; }
+    }
+
+    @keyframes rocket-launch {
+      0% { transform: translateX(-50%) translateY(0); }
+      100% { transform: translateX(-50%) translateY(-200px); }
+    }
+
+    .sidebar {
+      width: 200px;
+      background-color: #111;
+      padding: 20px;
+      border-right: 1px solid #333;
+      height: 100vh;
+      z-index: 10;
+    }
+
+    .sidebar h1 {
+      color: #ff66cc;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      margin: 20px 0;
+    }
+
+    .sidebar a:hover {
+      color: #ff66cc;
+    }
+
+    .content {
+      flex-grow: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    #output-container {
+      margin-top: 20px;
+      background: #111;
+      border: 1px solid #333;
+      height: calc(100vh - 280px);
+    }
+
+    #output-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    input, button {
+      background: #222;
+      color: white;
+      border: 1px solid #555;
+      padding: 6px 10px;
+      margin: 5px 0;
+    }
+
+    button:hover {
+      background: #333;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-screen">
+    <div class="rocket">
+      <div class="window"></div>
+      <div class="flame"></div>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <h1>🛠️ TRICKz</h1>
+    <a href="#" data-target="welcome">🏠 Welcome</a>
+    <a href="#" data-target="code-editor">💻 Coding</a>
+    <a href="#" data-target="hackit">🎯 HackIt!</a>
+    <a href="#" data-target="recon">🕵️ Reconnaissance</a>
+    <a href="https://discord.gg/4SYtwm8kgG" target="_blank">💬 Discord</a>
+  </div>
+
+  <div class="content">
+    <div id="welcome" class="section active">
+      <h2>Welcome to TRICKz</h2>
+      <p>TRICKz is a private hacker collective where elite minds gather to share cutting-edge multitools, underground knowledge, and advanced tactics...</p>
+    </div>
+
+    <div id="code-editor" class="section">
+      <h2>Select Your Language and Code</h2>
+      <button onclick="setLanguage('html')">HTML</button>
+      <button onclick="setLanguage('css')">CSS</button>
+      <button onclick="setLanguage('javascript')">JavaScript</button>
+      <textarea id="code-area" style="width:100%;height:300px;background:#111;color:white;border:1px solid #333;margin-top:10px;"></textarea>
+      <button onclick="runCode()">Run Code</button>
+      <div id="output-container">
+        <iframe id="output-frame"></iframe>
+      </div>
+      <div id="error-msg" style="color:red;margin-top:10px;"></div>
+    </div>
+
+    <div id="hackit" class="section">
+      <h2>HackIt! Level 1</h2>
+      <p>Can you deencrypt the password from the HTML source code?</p>
+      <!-- Encrypted password (Base64): dHJpY2t6X21hc3Rlcg== -->
+      <input type="text" id="hackit-answer" placeholder="Enter password...">
+      <button onclick="checkHackitLevel1()">Submit</button>
+      <div id="hackit-result" style="margin-top:10px;"></div>
+    </div>
+
+    <div id="hackit-level2" class="section">
+      <h2>HackIt! Level 2</h2>
+      <p>Encrypt the following password and enter the result.</p>
+      <p><strong>Password:</strong> phantom_gate</p>
+      <input type="text" id="level2-answer" placeholder="Enter encrypted password...">
+      <button onclick="checkHackitLevel2()">Submit</button>
+      <div id="level2-result" style="margin-top:10px;"></div>
+    </div>
+
+    <div id="recon" class="section">
+      <h2>🕵️ Reconnaissance</h2>
+      <p>Once you hack the account and get the encrypted password, you win. To win, you must paste both the encrypted password and the real password below:</p>
+      <input type="text" id="encrypted" placeholder="Encrypted password (Base64)">
+      <br>
+      <input type="text" id="realpass" placeholder="Real password">
+      <br>
+      <button onclick="checkRecon()">Submit</button>
+      <div id="recon-result" style="margin-top:10px;"></div>
+      <br><br>
+      <button onclick="window.open('https://cytrixandtrikz.github.io/instawam.github.io/', '_blank')">Start</button>
+    </div>
+  </div>
+
+  <script>
+    // Section switching
+    document.querySelectorAll('.sidebar a[data-target]').forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelectorAll('.section').forEach(section => {
+          section.classList.remove('active');
+        });
+        document.getElementById(this.dataset.target).classList.add('active');
+      });
+    });
+
+    function setLanguage(language) {
+      const codeArea = document.getElementById('code-area');
+      codeArea.value = '';
+      codeArea.placeholder = 'Write your ' + language.toUpperCase() + ' code here...';
+    }
+
+    function runCode() {
+      const code = document.getElementById('code-area').value;
+      const frame = document.getElementById('output-frame');
+      const errorMsg = document.getElementById('error-msg');
+      try {
+        frame.srcdoc = code;
+        errorMsg.textContent = "";
+      } catch (err) {
+        frame.srcdoc = `<p style="color:red;font-family:monospace;">⚠️ hmm.. this code seems wrong</p>`;
+        errorMsg.textContent = "⚠️ hmm.. this code seems wrong";
+      }
+    }
+
+    function checkHackitLevel1() {
+      const input = document.getElementById('hackit-answer').value.trim();
+      const result = document.getElementById('hackit-result');
+      if (input === "trickz_master") {
+        result.innerHTML = "<span style='color:lightgreen;'>✅ Correct! Welcome to Level 2...</span>";
+        setTimeout(() => {
+          document.getElementById('hackit').classList.remove('active');
+          document.getElementById('hackit-level2').classList.add('active');
+        }, 1500);
+      } else {
+        result.innerHTML = "<span style='color:red;'>❌ Incorrect. Try again.</span>";
+      }
+    }
+
+    function checkHackitLevel2() {
+      const input = document.getElementById('level2-answer').value.trim();
+      const result = document.getElementById('level2-result');
+      if (input === "cGhhbnRvbV9nYXRl") {
+        result.innerHTML = "<span style='color:lightgreen;'>🎉 You completed Level 2! More coming soon...</span>";
+      } else {
+        result.innerHTML = "<span style='color:red;'>❌ Incorrect. Try again.</span>";
+      }
+    }
+
+    function checkRecon() {
+      const enc = document.getElementById('encrypted').value.trim();
+      const pass = document.getElementById('realpass').value.trim();
+      const result = document.getElementById('recon-result');
+      if (enc === "c2VjdXJlcGFzc3dvcmQyMg==" && pass === "securepassword22") {
+        result.innerHTML = "<span style='color:lightgreen;'>🏁 You win!!</span>";
+      } else {
+        result.innerHTML = "<span style='color:red;'>❌ Incorrect. Try again.</span>";
+      }
+    }
+  </script>
+</body>
+</html>
