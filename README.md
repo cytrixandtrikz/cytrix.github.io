@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>TRICKz</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: monospace;
-      background: black;
-      color: white;
-      display: flex;
-    }
-
     #loading-screen {
       position: fixed;
       top: 0;
@@ -140,30 +126,6 @@
       background: #333;
       cursor: pointer;
     }
-  </style>
-</head>
-<body>
-  <div id="loading-screen">
-    <div class="rocket">
-      <div class="window"></div>
-      <div class="flame"></div>
-    </div>
-  </div>
-
-  <div class="sidebar">
-    <h1>🛠️ TRICKz</h1>
-    <a href="#" data-target="welcome">🏠 Welcome</a>
-    <a href="#" data-target="code-editor">💻 Coding</a>
-    <a href="#" data-target="hackit">🎯 HackIt!</a>
-    <a href="#" data-target="recon">🕵️ Reconnaissance</a>
-    <a href="https://discord.gg/4SYtwm8kgG" target="_blank">💬 Discord</a>
-  </div>
-
-  <div class="content">
-    <div id="welcome" class="section active">
-      <h2>Welcome to TRICKz</h2>
-      <p>TRICKz is a private hacker collective where elite minds gather to share cutting-edge multitools, underground knowledge, and advanced tactics...</p>
-    </div>
 
     <div id="code-editor" class="section">
       <h2>Select Your Language and Code</h2>
@@ -208,73 +170,3 @@
       <br><br>
       <button onclick="window.open('https://cytrixandtrikz.github.io/instawam.github.io/', '_blank')">Start</button>
     </div>
-  </div>
-
-  <script>
-    // Section switching
-    document.querySelectorAll('.sidebar a[data-target]').forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelectorAll('.section').forEach(section => {
-          section.classList.remove('active');
-        });
-        document.getElementById(this.dataset.target).classList.add('active');
-      });
-    });
-
-    function setLanguage(language) {
-      const codeArea = document.getElementById('code-area');
-      codeArea.value = '';
-      codeArea.placeholder = 'Write your ' + language.toUpperCase() + ' code here...';
-    }
-
-    function runCode() {
-      const code = document.getElementById('code-area').value;
-      const frame = document.getElementById('output-frame');
-      const errorMsg = document.getElementById('error-msg');
-      try {
-        frame.srcdoc = code;
-        errorMsg.textContent = "";
-      } catch (err) {
-        frame.srcdoc = `<p style="color:red;font-family:monospace;">⚠️ hmm.. this code seems wrong</p>`;
-        errorMsg.textContent = "⚠️ hmm.. this code seems wrong";
-      }
-    }
-
-    function checkHackitLevel1() {
-      const input = document.getElementById('hackit-answer').value.trim();
-      const result = document.getElementById('hackit-result');
-      if (input === "trickz_master") {
-        result.innerHTML = "<span style='color:lightgreen;'>✅ Correct! Welcome to Level 2...</span>";
-        setTimeout(() => {
-          document.getElementById('hackit').classList.remove('active');
-          document.getElementById('hackit-level2').classList.add('active');
-        }, 1500);
-      } else {
-        result.innerHTML = "<span style='color:red;'>❌ Incorrect. Try again.</span>";
-      }
-    }
-
-    function checkHackitLevel2() {
-      const input = document.getElementById('level2-answer').value.trim();
-      const result = document.getElementById('level2-result');
-      if (input === "cGhhbnRvbV9nYXRl") {
-        result.innerHTML = "<span style='color:lightgreen;'>🎉 You completed Level 2! More coming soon...</span>";
-      } else {
-        result.innerHTML = "<span style='color:red;'>❌ Incorrect. Try again.</span>";
-      }
-    }
-
-    function checkRecon() {
-      const enc = document.getElementById('encrypted').value.trim();
-      const pass = document.getElementById('realpass').value.trim();
-      const result = document.getElementById('recon-result');
-      if (enc === "c2VjdXJlcGFzc3dvcmQyMg==" && pass === "securepassword22") {
-        result.innerHTML = "<span style='color:lightgreen;'>🏁 You win!!</span>";
-      } else {
-        result.innerHTML = "<span style='color:red;'>❌ Incorrect. Try again.</span>";
-      }
-    }
-  </script>
-</body>
-</html>
